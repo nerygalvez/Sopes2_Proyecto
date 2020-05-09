@@ -28,7 +28,7 @@ int main( int argc, char **argv )
  
   if (wd == -1)
     {
-      printf("NO se pudo agregar reloj %s\n","/");
+      printf("No se pudo agregar reloj %s\n","/");
     }
   else
     {
@@ -68,8 +68,8 @@ int main( int argc, char **argv )
           if ( event->mask & IN_CREATE) {
             if (event->mask & IN_ISDIR)
               {
-                printf( "El directorio %s fue creado.\n", event->name );     
-               fprintf(fptr,"El directorio %s fue creado.\n", event->name);  
+                printf( "La carpeta %s fue creada.\n", event->name );     
+               fprintf(fptr,"La carpeta %s fue creada.\n", event->name);  
               }
             else
               {
@@ -80,8 +80,8 @@ int main( int argc, char **argv )
            
           if ( event->mask & IN_MODIFY) {
             if (event->mask & IN_ISDIR){
-              printf( "El directorio %s fue modificado.\n", event->name );    
-              fprintf(fptr,"El directorio %s fue modificado.\n", event->name );     
+              printf( "La carpeta %s fue modificada.\n", event->name );    
+              fprintf(fptr,"La carpeta %s fue modificada.\n", event->name );     
             }
             else{
               printf( "El archivo %s fue modificado. %d\n", event->name, event->wd );   
@@ -91,8 +91,8 @@ int main( int argc, char **argv )
            
           if ( event->mask & IN_DELETE) {
             if (event->mask & IN_ISDIR){
-              printf( "El directorio %s fue eliminado.\n", event->name );   
-              fprintf(fptr,"El directorio %s fue eliminado.\n", event->name  ); 
+              printf( "La carpeta %s fue eliminada.\n", event->name );   
+              fprintf(fptr,"La carpeta %s fue eliminada.\n", event->name  ); 
             }    
             else{
               printf( "El archivo %s fue eliminado.  %d\n", event->name, event->wd );     
