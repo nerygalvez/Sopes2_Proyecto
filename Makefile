@@ -1,4 +1,5 @@
 obj-m += procesos_201403525.o
+obj-m += inotify_201403525.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
