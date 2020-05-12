@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/inotify.h>
 #include <limits.h>
+#include <time.h>
  
 #define MAX_EVENTS 1024 /*Max. number of events to process at one go*/
 #define LEN_NAME 16 /*Assuming that the length of the filename won't exceed 16 bytes*/
@@ -54,49 +55,53 @@ int main( int argc, char **argv )
 
         
 
-                          if(fptr == NULL)
+                if(fptr == NULL)
                 {
-                    printf("Error!");   
+                    printf("No se pudo cargar el archivo para el log!");   
                     return -1;           
                 }
-
-              //int num = 300;
-                  
                    
         struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
         if ( event->len ) {
+
+          time_t rawtime;
+          struct tm *info;
+          time( &rawtime );
+          info = localtime( &rawtime );
+          //printf("Current local time and date: %s", asctime(info));
+          
           if ( event->mask & IN_CREATE) {
             if (event->mask & IN_ISDIR)
               {
-                printf( "La carpeta %s fue creada.\n", event->name );     
-               fprintf(fptr,"La carpeta %s fue creada.\n", event->name);  
+                printf( "La carpeta %s fue creada. --- %s\n", event->name, asctime(info) );     
+               fprintf(fptr,"La carpeta %s fue creada. --- %s\n", event->name, asctime(info));  
               }
             else
               {
-                printf( "El archivo %s fue creado con WD %d\n", event->name, event->wd );  
-              fprintf(fptr,"El archivo %s fue creado con WD %d\n", event->name, event->wd);   
+                printf( "El archivo %s fue creado con WD %d --- %s\n", event->name, event->wd, asctime(info));  
+                fprintf(fptr,"El archivo %s fue creado con WD %d --- %s\n", event->name, event->wd, asctime(info));   
               }   
           }
            
           if ( event->mask & IN_MODIFY) {
             if (event->mask & IN_ISDIR){
-              printf( "La carpeta %s fue modificada.\n", event->name );    
-              fprintf(fptr,"La carpeta %s fue modificada.\n", event->name );     
+              printf( "La carpeta %s fue modificada. --- %s\n", event->name , asctime(info));    
+              fprintf(fptr,"La carpeta %s fue modificada. --- %s\n", event->name , asctime(info));     
             }
             else{
-              printf( "El archivo %s fue modificado. %d\n", event->name, event->wd );   
-              fprintf(fptr,"El archivo %s fue modificado.%d\n", event->name, event->wd );  
+              printf( "El archivo %s fue modificado. %d --- %s\n", event->name, event->wd, asctime(info));   
+              fprintf(fptr,"El archivo %s fue modificado.%d --- %s\n", event->name, event->wd, asctime(info));  
             }   
           }
            
           if ( event->mask & IN_DELETE) {
             if (event->mask & IN_ISDIR){
-              printf( "La carpeta %s fue eliminada.\n", event->name );   
-              fprintf(fptr,"La carpeta %s fue eliminada.\n", event->name  ); 
+              printf( "La carpeta %s fue eliminada.\n --- %s", event->name , asctime(info));   
+              fprintf(fptr,"La carpeta %s fue eliminada.\n --- %s", event->name, asctime(info)); 
             }    
             else{
-              printf( "El archivo %s fue eliminado.  %d\n", event->name, event->wd );     
-              fprintf(fptr,"El archivo %s fue eliminado.  %d\n", event->name, event->wd  );  
+              printf( "El archivo %s fue eliminado.  %d\n --- %s", event->name, event->wd, asctime(info));     
+              fprintf(fptr,"El archivo %s fue eliminado.  %d\n --- %s", event->name, event->wd, asctime(info));  
             }
           }  
  
