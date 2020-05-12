@@ -96,12 +96,12 @@ int main( int argc, char **argv )
            
           if ( event->mask & IN_DELETE) {
             if (event->mask & IN_ISDIR){
-              printf( "La carpeta %s fue eliminada.\n --- %s", event->name , asctime(info));   
-              fprintf(fptr,"La carpeta %s fue eliminada.\n --- %s", event->name, asctime(info)); 
+              printf( "La carpeta %s fue eliminada. --- %s\n", event->name , asctime(info));   
+              fprintf(fptr,"La carpeta %s fue eliminada. --- %s\n", event->name, asctime(info)); 
             }    
             else{
-              printf( "El archivo %s fue eliminado.  %d\n --- %s", event->name, event->wd, asctime(info));     
-              fprintf(fptr,"El archivo %s fue eliminado.  %d\n --- %s", event->name, event->wd, asctime(info));  
+              printf( "El archivo %s fue eliminado.  %d --- %s\n", event->name, event->wd, asctime(info));     
+              fprintf(fptr,"El archivo %s fue eliminado.  %d --- %s\n", event->name, event->wd, asctime(info));  
             }
           }  
  
