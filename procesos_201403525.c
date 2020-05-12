@@ -105,15 +105,7 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
     //seq_printf(m, "\t\"Procesos\" : [\n"); //Inicio del arreglo de procesos
 
     seq_printf(m, "<table id=\"tabla_datos\">"); //Inicio de la tabla
-    seq_printf(m, "<tr>"
-            					+ "<th>#</th>"
-							    + "<th>PID</th>"
-                                +"<th>Nombre</th>"
-							    +"<th>Usuario</th>"
-							    +"<th>Estado</th>"
-								+"<th>% RAM</th>"
-							    +"<th>Kill</th>"
-					    	+"</tr>");
+    seq_printf(m, "<tr> <th>#</th><th>PID</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>% RAM</th><th>Kill</th></tr>");
 
     //Imprimo la informacion de cada uno de los procesos
     for_each_process(task){
@@ -136,15 +128,7 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
         //seq_printf(m, "\t\t{\"PID\":%d , \"Nombre\":\"%s\" , \"Usuario\":%d, \"Ram\":%llu , \"Cpu\":%d , \"Estado\":\"%s\"" ,
         //           task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado);
 
-        seq_printf(m, "<tr>"
-            					+ "<td>%d</td>"
-						    	+ "<td>%s</td>"
-                                + "<td>%d</td>"
-								+ "<td>%llu</td>"
-								+ "<td>%d</td>"
-								+ "<td>%s</td>"
-						      	
-					   + "</tr>", contador_procesos, task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla
+        seq_printf(m, "<tr><td>%d</td><td>%s</td><td>%d</td><td>%llu</td><td>%d</td><td>%s</td></tr>", contador_procesos, task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla
 
 
         //Ahora veo los hijos del proceso
