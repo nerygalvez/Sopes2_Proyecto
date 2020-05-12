@@ -113,7 +113,7 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
 							    +"<th>Estado</th>"
 								+"<th>% RAM</th>"
 							    +"<th>Kill</th>"
-					    	"</tr>");
+					    	+"</tr>");
 
     //Imprimo la informacion de cada uno de los procesos
     for_each_process(task){
