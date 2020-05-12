@@ -50,7 +50,7 @@ int main( int argc, char **argv )
       while ( i < length ) {
 
 
-                fptr = fopen("/home/ing-usac-201403525/Documentos/Sopes2_Proyecto/201403525.log","a");
+                fptr = fopen("/home/ing-usac-201403525/Sopes2/Sopes2_Proyecto/201403525.log","a");
 
         
 
