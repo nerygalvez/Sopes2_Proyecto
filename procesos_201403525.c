@@ -144,7 +144,7 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
 								+ "<td>%d</td>"
 								+ "<td>%s</td>"
 						      	
-					    "</tr>", contador_procesos, task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla
+					   + "</tr>", contador_procesos, task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla
 
 
         //Ahora veo los hijos del proceso
@@ -182,7 +182,7 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
                                     + "<td>%d</td>"
                                     + "<td>%s</td>"
                                     
-                            "</tr>", contador_procesos, task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla            
+                           + "</tr>", contador_procesos, task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla            
 
 
 
