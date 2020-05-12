@@ -158,15 +158,7 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
 
             //seq_printf(m, ",\"Hijos\" : [] }"); //fin del proceso hijo
 
-            seq_printf(m, "<tr>"
-                                    + "<td>%d</td>"
-                                    + "<td>%s</td>"
-                                    + "<td>%d</td>"
-                                    + "<td>%llu</td>"
-                                    + "<td>%d</td>"
-                                    + "<td>%s</td>"
-                                    
-                           + "</tr>", contador_procesos, task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla            
+            seq_printf(m, "<tr><td>%d</td><td>%s</td><td>%d</td><td>%llu</td><td>%d</td><td>%s</td></tr>", contador_procesos, task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla            
 
 
 
