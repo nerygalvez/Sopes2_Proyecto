@@ -99,18 +99,14 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
     contador_procesos = 0;
     ejecucion = 0, suspendidos = 0, detenidos = 0, zombies = 0;
 
-    //seq_printf(m, "{\n"); //Inicio del json
-    seq_printf(m, "<div style=\"overflow-x:auto;\">"); //Inicio del div de la tabla
+    seq_printf(m, "{\n"); //Inicio del json
 
-    //seq_printf(m, "\t\"Procesos\" : [\n"); //Inicio del arreglo de procesos
-
-    seq_printf(m, "<table id=\"tabla_datos\">"); //Inicio de la tabla
-    seq_printf(m, "<tr> <th>#</th><th>PID</th><th>Nombre</th><th>Usuario</th><th>Estado</th><th>% RAM</th><th>Kill</th></tr>");
+    seq_printf(m, "\t\"Procesos\" : [\n"); //Inicio del arreglo de procesos
 
     //Imprimo la informacion de cada uno de los procesos
     for_each_process(task){
-        //if (contador_procesos != 0) //Si no es el primer proceso pongo una coma para separar los procesos
-        //    seq_printf(m, ",\n");
+        if (contador_procesos != 0) //Si no es el primer proceso pongo una coma para separar los procesos
+            seq_printf(m, ",\n");
         
         //Inicio del proceso
         //Con este if compruebo si el proceso tiene el scruct mm que sera para obtener la memoria del proceso
@@ -125,19 +121,16 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
 
         char cadena_estado[30] = "";
         obtener_estado(task->state, cadena_estado);
-        //seq_printf(m, "\t\t{\"PID\":%d , \"Nombre\":\"%s\" , \"Usuario\":%d, \"Ram\":%llu , \"Cpu\":%d , \"Estado\":\"%s\"" ,
-        //           task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado);
-
-        seq_printf(m, "<tr><td>%d</td><td>%s</td><td>%d</td><td>%llu</td><td>%d</td><td>%s</td></tr>", contador_procesos, task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla
-
+        seq_printf(m, "\t\t{\"PID\":%d , \"Nombre\":\"%s\" , \"Usuario\":%d, \"Ram\":%llu , \"Cpu\":%d , \"Estado\":\"%s\"" ,
+                   task->pid, task->comm, task->cred->uid, size*100/S(i.totalram), task->cpuset_mem_spread_rotor, cadena_estado);
 
         //Ahora veo los hijos del proceso
-        //int contador_hijos = 0;
-        //seq_printf(m, ", \"Hijos\" : [\n\t\t\t\t"); //Inicio del arreglo de hijos del proceso
+        int contador_hijos = 0;
+        seq_printf(m, ", \"Hijos\" : [\n\t\t\t\t"); //Inicio del arreglo de hijos del proceso
         list_for_each(list, &task->children){
 
-            //if (contador_hijos != 0) //Si no es el primer proceso hijo pongo una coma para separar los procesos hijos
-            //    seq_printf(m, ",\n");
+            if (contador_hijos != 0) //Si no es el primer proceso hijo pongo una coma para separar los procesos hijos
+                seq_printf(m, ",\n");
 
             task_child = list_entry(list, struct task_struct, sibling);
 
@@ -153,41 +146,24 @@ static int proc_llenar_archivo(struct seq_file *m, void *v) {
             }
 
             obtener_estado(task_child->state, cadena_estado);
-            //seq_printf(m, "\t\t\t\t{\"PID\":%d , \"Nombre\":\"%s\" , \"Usuario\":%d, \"Ram\":%llu , \"Cpu\":%d , \"Estado\":\"%s\"" ,
-            //       task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado);
+            seq_printf(m, "\t\t\t\t{\"PID\":%d , \"Nombre\":\"%s\" , \"Usuario\":%d, \"Ram\":%llu , \"Cpu\":%d , \"Estado\":\"%s\"" ,
+                   task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado);
 
-            //seq_printf(m, ",\"Hijos\" : [] }"); //fin del proceso hijo
+            seq_printf(m, ",\"Hijos\" : [] }"); //fin del proceso hijo
 
-            seq_printf(m, "<tr><td>%d</td><td>%s</td><td>%d</td><td>%llu</td><td>%d</td><td>%s</td></tr>", contador_procesos, task_child->pid, task_child->comm, task_child->cred->uid, size*100/S(i.totalram), task_child->cpuset_mem_spread_rotor, cadena_estado); //Agrego un proceso a la tabla            
-
-
-
-            //contador_hijos++; //Aumento el número de hijos
+            contador_hijos++; //Aumento el número de hijos
         }
 
-        //seq_printf(m, "\t\t\t\t]\n\t\t}"); //fin del arreglo de hijos del proceso y fin del proceso
+        seq_printf(m, "\t\t\t\t]\n\t\t}"); //fin del arreglo de hijos del proceso y fin del proceso
     }
     
-    //seq_printf(m, "\n\t\t]\n"); //fin del arreglo de procesos
+    seq_printf(m, "\n\t\t]\n"); //fin del arreglo de procesos
 
-    seq_printf(m, "</table>"); //Fin de la tabla
-
-    seq_printf(m, "</div>"); //Fin del div de la tabla
-
-
-    seq_printf(m, "<div style=\"padding-left:16px\">");
-    seq_printf(m, "<h3>Número total de procesos:</h3> <p id=\"total\">%d</p>", contador_procesos);
-    seq_printf(m, "<h3>Número de procesos en ejecución:</h3> <p id=\"running\">%d</p>", ejecucion);
-    seq_printf(m, "<h3>Número de procesos suspendidos:</h3> <p id=\"sleeping\">%d</p>", suspendidos);
-    seq_printf(m, "<h3>Número de procesos detenidos:</h3> <p id=\"stoped\">%d</p>", detenidos);
-    seq_printf(m, "<h3>Número de procesos zombie:</h3> <p id=\"zombie\">%d</p>", zombies);
-    seq_printf(m, "</div>");
-
-    //seq_printf(m, "\t,\"Total\" : %d, \"Ejecucion\" : %d, \"Suspendidos\" : %d, \"Detenidos\" : %d, \"Zombies\" : %d \n"
-    //            , contador_procesos, ejecucion, suspendidos, detenidos, zombies); //Pongo los otros atributos del json
+    seq_printf(m, "\t,\"Total\" : %d, \"Ejecucion\" : %d, \"Suspendidos\" : %d, \"Detenidos\" : %d, \"Zombies\" : %d \n"
+                , contador_procesos, ejecucion, suspendidos, detenidos, zombies); //Pongo los otros atributos del json
 
 
-    //seq_printf(m, "}\n"); //fin del json
+    seq_printf(m, "}\n"); //fin del json
 
     return 0;
 }
